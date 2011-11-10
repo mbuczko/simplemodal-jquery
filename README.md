@@ -14,8 +14,7 @@ ALERT INTEGRATION
 -----------------
 Snippet code Javascript:
 
-	#JS
-	
+```javascript	
 	$("#myElement").click(function() {
 	      $.fn.SimpleModal({
                 btn_ok:   "Alert button"
@@ -23,35 +22,34 @@ Snippet code Javascript:
 	            contents: "Your message..."
 	      }).show();
 	});
+```
 
 Snippet code HTML:
 
-	#HTML
-	
+```html	
 	<a id="myElement" href="javascript;">Alert</a>
-
+```
 
 MODAL-AJAX INTEGRATION
 ----------------------
 Snippet code Javascript:
 
-	#JS
-
+```javascript
 	$("#myElement").click(function() {
-        $.fn.SimpleModal({
+            $.fn.SimpleModal({
 	        model: "modal-ajax",
 	        title: "Title",
 	        param: {
 	           url: "file-content.php",
 	           onRequestComplete: function() { /* Action on request complete */ }
 	        }
-        }.addButton("Action button", "btn primary", function() {
+            }.addButton("Action button", "btn primary", function() {
 	        this.hide();
-	    }).addButton("Cancel", "btn").show();
+            }).addButton("Cancel", "btn").show();
 	});
-
+```
 Snippet code HTML:
 
-	#HTML
-
+```html
 	<a id="myElement" href="javascript;">Open Modal</a>
+```
