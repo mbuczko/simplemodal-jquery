@@ -44,7 +44,7 @@ Snippet code Javascript:
 	           onRequestComplete: function() { /* Action on request complete */ }
 	        }
             }.addButton("Action button", "btn primary", function() {
-	        this.hide();
+	            this.hide();
             }).addButton("Cancel", "btn").show();
 	});
 ```
