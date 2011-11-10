@@ -36,16 +36,16 @@ Snippet code Javascript:
 
 ```javascript
 	$("#myElement").click(function() {
-            $.fn.SimpleModal({
-	        model: "modal-ajax",
-	        title: "Title",
-	        param: {
-	           url: "file-content.php",
-	           onRequestComplete: function() { /* Action on request complete */ }
-	        }
-            }.addButton("Action button", "btn primary", function() {
-	            this.hide();
-            }).addButton("Cancel", "btn").show();
+        $.fn.SimpleModal({
+            model: "modal-ajax",
+            title: "Title",
+            param: {
+                url: "file-content.php",
+                onRequestComplete: function() { /* Action on request complete */ }
+            }
+        }.addButton("Action button", "btn primary", function() {
+            this.hide();
+        }).addButton("Cancel", "btn").show();
 	});
 ```
 Snippet code HTML:
