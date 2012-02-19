@@ -8,7 +8,7 @@ $(document).ready(function() {
   $('#alert').click(function() {
     $.fn.SimpleModal({btn_ok: 'Alert button', title: 'Alert Modal Title', contents: 'Lorem ipsum dolor sit amet...'}).show();
   });
-  
+
   /* Confirm */
   $('#confirm').click(function() {
     $.fn.SimpleModal({
@@ -21,7 +21,7 @@ $(document).ready(function() {
         contents: 'Lorem ipsum dolor sit amet...'
     }).show();
   });
-  
+
   /* Modal */
   $('#modal').click(function() {
     $.fn.SimpleModal({
@@ -31,14 +31,14 @@ $(document).ready(function() {
         contents: '<p ><img style="text-align:center" src="assets/images/simpleModalSmallWhite.png" />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>'
     }).addButton('Confirm', 'btn primary', function() {
         alert('Action confirm modal');
-        this.hide();
+        this.hideModal();
     }).addButton('Cancel', 'btn').show();
   });
-  
+
   /* Modal Ajax */
   $('#modal-ajax').click(function() {
     $.fn.SimpleModal({
-        btn_ok: 'Confirm button', 
+        btn_ok: 'Confirm button',
         width: 600,
         model: 'modal-ajax',
         title: 'Are you sure you want to delete this?',
@@ -53,7 +53,7 @@ $(document).ready(function() {
 			$('confirm-delete-error').setStyle('display', 'block');
 		} else {
 			// Your code ...
-			this.hide();
+			this.hideModal();
 		}
     }).addButton('Cancel', 'btn').show();
   });
@@ -72,26 +72,26 @@ $(document).ready(function() {
   /* NO Header */
   $('#alert-noheader').click(function(e) {
       $.fn.SimpleModal({
-          hideHeader: true, 
-          closeButton: false, 
-          btn_ok: 'Close window', 
+          hideHeader: true,
+          closeButton: false,
+          btn_ok: 'Close window',
           width: 600,
           model: 'alert',
           contents: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
       }).show();
   });
-  
+
   /* NO Footer */
   $('#modal-nofooter').click(function(e) {
       $.fn.SimpleModal({
-          hideFooter: true, 
+          hideFooter: true,
           width: 710,
           title: 'Vimeo video',
           model: 'modal',
           contents: '<iframe src="http://player.vimeo.com/video/26198635?title=0&amp;byline=0&amp;portrait=0&amp;color=824571" width="680" height="382" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>'
         }).show();;
   });
-  
+
   $("#example-eheh").click(function(e) {
       $.fn.SimpleModal({
           btn_ok: 'Confirm button',
@@ -101,7 +101,7 @@ $(document).ready(function() {
           title: 'Eh eh eh',
           contents: '<p>Try clicking on the button \"Click ME please!\"</p>',
 
-          onAppend: function() {   
+          onAppend: function() {
               var item = $("#simple-modal .simple-modal-footer a");
               item.removeClass("primary").css({"background":"#824571","color": "#FFF" }).parent().addClass("align-left");
 	          item.bind("mouseenter", function() {

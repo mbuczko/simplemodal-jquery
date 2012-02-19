@@ -17,7 +17,7 @@ provides:
 
 * Simple Modal for jQuery
 * Version 1.0
-* 
+*
 * Copyright (c) 2011 Micha³ Buczko
 * Original Simple Modal copyrighted 2011 Marco Dell'Anna - http://www.plasm.it
 *
@@ -54,7 +54,7 @@ provides:
     var self = null;
 
     //Attach this new method to jQuery
-    $.fn.extend({ 
+    $.fn.extend({
         buttons: null,
         options: null,
 
@@ -68,7 +68,7 @@ provides:
             keyEsc:        true,
             overlayClick:  true,
             closeButton:   true, // X close button
-            hideHeader:    false, 
+            hideHeader:    false,
             hideFooter:    false,
             btn_ok:        "OK", // Label
             btn_cancel:    "Cancel", // Label
@@ -117,7 +117,7 @@ provides:
                     // in oppose to original version, i'm not catching exceptions
                     // i want to know what's eventually goes wrong
                     self.options.callback();
-                    self.hide();
+                    self.hideModal();
                 });
                 // Add button cancel
                 this.addButton(this.options.btn_cancel, "btn secondary");
@@ -127,19 +127,19 @@ provides:
             default:
 				// Alert
                 this.addButton(this.options.btn_ok, "btn primary");
-				node = this._drawWindow(this.options);			
+				node = this._drawWindow(this.options);
             }
 			if (node) {
                 // Custom size Modal
                 node.css('width', this.options.width);
-                
+
                 // Hide Header &&/|| Footer
                 if (this.options.hideHeader) node.addClass("hide-header");
                 if (this.options.hideFooter) node.addClass("hide-footer");
-                
+
                 // Add Button X
                 if (this.options.closeButton) this._addCloseButton();
-                
+
                 // Enabled Drag Window
                 if (this.options.draggable) {
                     var headDrag = node.find('.simple-modal-header'), clicked = false, dx=0, dy=0;
@@ -184,14 +184,14 @@ provides:
         },
 
         /**
-         * public method hide
+         * public method hideModal
          * Close model window
          * return
          */
-        hide: function() {
+        hideModal: function() {
 		    self._overlay('hide');
         },
-        
+
         /**
          * private method _drawWindow
          * Rendering window
@@ -215,7 +215,7 @@ provides:
             }
 			return node;
 		},
-        
+
         /**
          * public method addButton
          * Add button to Modal button array
@@ -226,12 +226,12 @@ provides:
             var bt = $('<a>').attr({
                 "title" : label,
                 "class" : classe
-            }).click(clickEvent ? function(e) { clickEvent.call(self, e); } : self.hide).text(label);
+            }).click(clickEvent ? function(e) { clickEvent.call(self, e); } : self.hideModal).text(label);
 
             this.buttons.push(bt);
  		    return this;
         },
-     
+
         /**
          * private method _injectAllButtons
          * Inject all buttons in simple-modal-footer
@@ -244,7 +244,7 @@ provides:
                footer.append(e);
             });
         },
-        
+
         /**
          * private method _addCloseButton
          * Inject Close botton (X button)
@@ -252,7 +252,7 @@ provides:
          */
         _addCloseButton: function() {
             var b = $("<a>").addClass('close').attr({"href": "#"}).text('x').click(function(e) {
-                self.hide();
+                self.hideModal();
             });
             $("#simple-modal").append(b);
             return b;
@@ -276,7 +276,7 @@ provides:
 
                 // Behaviour
                 if (this.options.overlayClick) {
-                    overlay.click(function(e) { self.hide(); });
+                    overlay.click(function(e) { self.hideModal(); });
                 }
 
                 // Add Control Resize
@@ -284,18 +284,18 @@ provides:
                 $(document).keyup(self._escape);
                 break;
 
-            case 'hide':               
+            case 'hide':
                 // Remove Overlay
                 $('#simple-modal-overlay').remove();
                 $('#simple-modal').remove();
-                
+
                 $(window).unbind('resize', self._display);
                 $(document).unbind('keyup', self._escape);
             }
         },
 
         _escape: function(e) {
-            if (e.keyCode == 27) self.hide();
+            if (e.keyCode == 27) self.hideModal();
         },
 
         /**
@@ -322,8 +322,8 @@ provides:
 
                             //self._display();
                             container.animate({
-                                width: width, 
-                                height: height, 
+                                width: width,
+                                height: height,
                                 left: ($(window).width() - width)/2,
                                 top: ($(window).height() - height)/2
                             }, 200, function() {
@@ -339,8 +339,8 @@ provides:
                         if (param.onRequestFailure) {
                             param.onRequestFailure();
                         }
-                    } 
-                    else 
+                    }
+                    else
                     {
                         if (param.onRequestComplete) {
                             param.onRequestComplete();
@@ -359,7 +359,7 @@ provides:
         _display: function() {
             // Update overlay
             $("#simple-modal-overlay").css({width: $(window).width(), height: $(window).height()});
-            
+
             // Update position popup
             var modal = $("#simple-modal"), top = self.options.offsetTop || ($(window).height() - modal.height())/2;
             modal.css({
@@ -367,7 +367,7 @@ provides:
                 left: (($(window).width() - modal.width())/2)
             });
         },
-                
+
         /**
          * private method _template
          * simple template by Thomas Fuchs
@@ -382,4 +382,3 @@ provides:
     });
 
 })(jQuery);
-
