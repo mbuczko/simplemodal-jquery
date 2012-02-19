@@ -6,7 +6,7 @@
 $(document).ready(function() {
   /* Alert */
   $('#alert').click(function() {
-    $.fn.SimpleModal({btn_ok: 'Alert button', title: 'Alert Modal Title', contents: 'Lorem ipsum dolor sit amet...'}).show();
+    $.fn.SimpleModal({btn_ok: 'Alert button', title: 'Alert Modal Title', contents: 'Lorem ipsum dolor sit amet...'}).showModal();
   });
 
   /* Confirm */
@@ -19,7 +19,7 @@ $(document).ready(function() {
         },
         title: 'Confirm Modal Title',
         contents: 'Lorem ipsum dolor sit amet...'
-    }).show();
+    }).showModal();
   });
 
   /* Modal */
@@ -32,7 +32,7 @@ $(document).ready(function() {
     }).addButton('Confirm', 'btn primary', function() {
         alert('Action confirm modal');
         this.hideModal();
-    }).addButton('Cancel', 'btn').show();
+    }).addButton('Cancel', 'btn').showModal();
   });
 
   /* Modal Ajax */
@@ -55,7 +55,7 @@ $(document).ready(function() {
 			// Your code ...
 			this.hideModal();
 		}
-    }).addButton('Cancel', 'btn').show();
+    }).addButton('Cancel', 'btn').showModal();
   });
 
   /* Modal Image */
@@ -66,7 +66,7 @@ $(document).ready(function() {
           param: {
               url: 'assets/images/lightbox.jpg'
           }
-        }).show();
+        }).showModal();
   });
 
   /* NO Header */
@@ -78,7 +78,7 @@ $(document).ready(function() {
           width: 600,
           model: 'alert',
           contents: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-      }).show();
+      }).showModal();
   });
 
   /* NO Footer */
@@ -89,7 +89,7 @@ $(document).ready(function() {
           title: 'Vimeo video',
           model: 'modal',
           contents: '<iframe src="http://player.vimeo.com/video/26198635?title=0&amp;byline=0&amp;portrait=0&amp;color=824571" width="680" height="382" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>'
-        }).show();;
+        }).showModal();
   });
 
   $("#example-eheh").click(function(e) {
@@ -113,6 +113,6 @@ $(document).ready(function() {
 	              }
 	          });
           }
-      }).addButton("Click ME please!", "btn primary", function(){}).show();
+      }).addButton("Click ME please!", "btn primary", function(){}).showModal();
   });
 });

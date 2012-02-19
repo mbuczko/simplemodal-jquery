@@ -91,12 +91,12 @@ provides:
         },
 
         /**
-         * public method show
+         * public method showModal
          * Open Modal
          * @options: param to rewrite
          * @return node HTML
          */
-        show: function() {
+        showModal: function() {
             var node = null;
 
             // Inserisce Overlay
