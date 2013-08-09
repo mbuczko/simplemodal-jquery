@@ -24,7 +24,7 @@ Snippet code Javascript:
                 btn_ok:   "Alert button"
                 title:    "Title",
 	            contents: "Your message..."
-	      }).show();
+	      }).showModal();
 	});
 ```
 
@@ -49,7 +49,7 @@ Snippet code Javascript:
             }
         }.addButton("Action button", "btn primary", function() {
             this.hide();
-        }).addButton("Cancel", "btn").show();
+        }).addButton("Cancel", "btn").showModal();
 	});
 ```
 Snippet code HTML:
