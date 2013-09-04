@@ -5,7 +5,7 @@ description: SIMPLE MODAL for jQuery is a small plugin based on original SimpleM
 license: MIT-style
 
 authors:
-- Micha³ Buczko
+- Michaï¿½ Buczko
 - Marco Dell'Anna
 
 requires:
@@ -18,7 +18,7 @@ provides:
 * Simple Modal for jQuery
 * Version 1.0
 *
-* Copyright (c) 2011 Micha³ Buczko
+* Copyright (c) 2011 Michaï¿½ Buczko
 * Original Simple Modal copyrighted 2011 Marco Dell'Anna - http://www.plasm.it
 *
 * Requires:
@@ -105,7 +105,7 @@ provides:
             // Switch different modal
             switch(this.options.model) {
             case "modal-ajax":
-				node = this._drawWindow(this.options);
+				        node = this._drawWindow(this.options);
                 this._loadContents({
                     "url": self.options.param.url || "",
                     "onRequestComplete": this.options.param.onRequestComplete
@@ -121,13 +121,15 @@ provides:
                 });
                 // Add button cancel
                 this.addButton(this.options.btn_cancel, "btn secondary");
+                		node = this._drawWindow(this.options);
+                break;
             case "modal":
-				node = this._drawWindow(this.options);
+				        node = this._drawWindow(this.options);
                 break;
             default:
 				// Alert
                 this.addButton(this.options.btn_ok, "btn primary");
-				node = this._drawWindow(this.options);
+				        node = this._drawWindow(this.options);
             }
 			if (node) {
                 // Custom size Modal
@@ -331,8 +333,8 @@ provides:
                             });
                         });
 			} else {
-                $('#simple-modal').load(param.url, function(responseText, textStatus, XMLHttpRequest) {
-                    var container = $(this).removeClass("loading");
+                $('#simple-modal .contents').load(param.url, function(responseText, textStatus, XMLHttpRequest) {
+                    var container = $(this).parent().parent().removeClass("loading");
                     if (textStatus !== 'success') {
 	                    container.find(".contents").html("loading failed");
 
