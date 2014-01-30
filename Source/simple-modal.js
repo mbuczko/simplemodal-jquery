@@ -5,7 +5,7 @@ description: SIMPLE MODAL for jQuery is a small plugin based on original SimpleM
 license: MIT-style
 
 authors:
-- Micha³ Buczko
+- Michaï¿½ Buczko
 - Marco Dell'Anna
 
 requires:
@@ -18,7 +18,7 @@ provides:
 * Simple Modal for jQuery
 * Version 1.0
 *
-* Copyright (c) 2011 Micha³ Buczko
+* Copyright (c) 2011 Michaï¿½ Buczko
 * Original Simple Modal copyrighted 2011 Marco Dell'Anna - http://www.plasm.it
 *
 * Requires:
@@ -253,6 +253,7 @@ provides:
         _addCloseButton: function() {
             var b = $("<a>").addClass('close').attr({"href": "#"}).text('x').click(function(e) {
                 self.hideModal();
+                e.preventDefault();
             });
             $("#simple-modal").append(b);
             return b;

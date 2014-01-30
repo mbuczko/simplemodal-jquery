@@ -21,7 +21,7 @@ Snippet code Javascript:
 ```javascript	
 	$("#myElement").click(function() {
 	      $.fn.SimpleModal({
-                btn_ok:   "Alert button"
+                btn_ok:   "Alert button",
                 title:    "Title",
 	            contents: "Your message..."
 	      }).show();
