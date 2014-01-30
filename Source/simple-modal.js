@@ -121,6 +121,8 @@ provides:
                 });
                 // Add button cancel
                 this.addButton(this.options.btn_cancel, "btn secondary");
+                		node = this._drawWindow(this.options);
+                break;
             case "modal":
 				node = this._drawWindow(this.options);
                 break;
