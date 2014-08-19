@@ -298,7 +298,9 @@ provides:
         },
 
         _escape: function(e) {
-            if (e.keyCode == 27) self.hideModal();
+            if (self.options.keyEsc) {
+                if (e.keyCode == 27) self.hideModal();
+            }
         },
 
         /**
