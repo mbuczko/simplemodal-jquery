@@ -6,7 +6,7 @@ SIMPLE MODAL is not a lightbox although the possibility to hide parts of its lay
 
 Working example: 
 
-http://buczko.pl/simplemodal-jquery/Demo/
+http://linkify.me/simplemodal-jquery/Demo/
 
 How to Use
 ----------
