@@ -46,6 +46,8 @@ provides:
 * OTHER DEALINGS IN THE SOFTWARE.
 *
 * Log:
+* - Fixed bug where 'keyEsc' option was ignored.
+* 
 * 1.0 - Initial version [Tested on: ie8/ie9/Chrome/Firefox7/Safari]
 */
 
@@ -298,7 +300,7 @@ provides:
         },
 
         _escape: function(e) {
-            if (e.keyCode == 27) self.hideModal();
+        	if (self.options.keyEsc && e.keyCode == 27) self.hideModal();
         },
 
         /**
