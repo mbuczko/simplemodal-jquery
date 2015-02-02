@@ -46,6 +46,7 @@ provides:
 * OTHER DEALINGS IN THE SOFTWARE.
 *
 * Log:
+* - Added option 'animate' to enable/disable animation.
 * - Fixed bug where 'keyEsc' option was ignored.
 * 
 * 1.0 - Initial version [Tested on: ie8/ie9/Chrome/Firefox7/Safari]
@@ -72,6 +73,7 @@ provides:
             closeButton:   true, // X close button
             hideHeader:    false,
             hideFooter:    false,
+			animate:       true,
             btn_ok:        "OK", // Label
             btn_cancel:    "Cancel", // Label
             template:"<div class=\"simple-modal-header\"> \
@@ -277,7 +279,7 @@ provides:
 
                 $('body').append(overlay);
 
-                overlay.animate({opacity: this.options.overlayOpacity});
+                overlay.animate({opacity: this.options.overlayOpacity}, self.options.animate ? 400 : 0);
 
                 // Behaviour
                 if (this.options.overlayClick) {
@@ -331,8 +333,8 @@ provides:
                                 height: height,
                                 left: ($(window).width() - width)/2,
                                 top: ($(window).height() - height)/2
-                            }, 200, function() {
-                                image.animate({opacity: 1});
+                            }, self.options.animate ? 200 : 0, function () {
+                            	image.animate({opacity: 1},self.options.animate ? 400 : 0);
                             });
                         });
 			} else {
