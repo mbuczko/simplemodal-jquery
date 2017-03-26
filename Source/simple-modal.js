@@ -1,56 +1,56 @@
 /*
----
-description: SIMPLE MODAL for jQuery is a small plugin based on original SimpleModal for Mootools. It can be used to generate alert or confirm messages with few lines of code. Confirm configuration involves the use of callbacks to be applied to affirmative action;i t can work in asynchronous mode and retrieve content from external pages or getting the inline content. SIMPLE MODAL is not a lightbox although the possibility to hide parts of its layout may partially make it similar.
+  ---
+  description: SIMPLE MODAL for jQuery is a small plugin based on original SimpleModal for Mootools. It can be used to generate alert or confirm messages with few lines of code. Confirm configuration involves the use of callbacks to be applied to affirmative action;i t can work in asynchronous mode and retrieve content from external pages or getting the inline content. SIMPLE MODAL is not a lightbox although the possibility to hide parts of its layout may partially make it similar.
 
-license: MIT-style
+  license: MIT-style
 
-authors:
-- Micha� Buczko
-- Marco Dell'Anna
+  authors:
+  - Michał Buczko
+  - Marco Dell'Anna
 
-requires:
-- jQuery 1.6+
+  requires:
+  - jQuery 1.6+
 
-provides:
-- SimpleModal
-...
+  provides:
+  - SimpleModal
+  ...
 
-* Simple Modal for jQuery
-* Version 1.0
-*
-* Copyright (c) 2011 Micha� Buczko
-* Original Simple Modal copyrighted 2011 Marco Dell'Anna - http://www.plasm.it
-*
-* Requires:
-* jQuery http://jquery.com
-*
-* Permission is hereby granted, free of charge, to any person
-* obtaining a copy of this software and associated documentation
-* files (the "Software"), to deal in the Software without
-* restriction, including without limitation the rights to use,
-* copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the
-* Software is furnished to do so, subject to the following
-* conditions:
-*
-* The above copyright notice and this permission notice shall be
-* included in all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-* OTHER DEALINGS IN THE SOFTWARE.
-*
-* Log:
-* - Added option 'animate' to enable/disable animation.
-* - Fixed bug where 'keyEsc' option was ignored.
-* 
-* 1.0 - Initial version [Tested on: ie8/ie9/Chrome/Firefox7/Safari]
-*/
+  * Simple Modal for jQuery
+  * Version 1.0
+  *
+  * Copyright (c) 2011 Michał Buczko
+  * Original Simple Modal copyrighted 2011 Marco Dell'Anna - http://www.plasm.it
+  *
+  * Requires:
+  * jQuery http://jquery.com
+  *
+  * Permission is hereby granted, free of charge, to any person
+  * obtaining a copy of this software and associated documentation
+  * files (the "Software"), to deal in the Software without
+  * restriction, including without limitation the rights to use,
+  * copy, modify, merge, publish, distribute, sublicense, and/or sell
+  * copies of the Software, and to permit persons to whom the
+  * Software is furnished to do so, subject to the following
+  * conditions:
+  *
+  * The above copyright notice and this permission notice shall be
+  * included in all copies or substantial portions of the Software.
+  *
+  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+  * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+  * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+  * OTHER DEALINGS IN THE SOFTWARE.
+  *
+  * Log:
+  * - Added option 'animate' to enable/disable animation.
+  * - Fixed bug where 'keyEsc' option was ignored.
+  *
+  * 1.0 - Initial version [Tested on: ie8/ie9/Chrome/Firefox7/Safari]
+  */
 
 (function($) {
 
@@ -65,24 +65,24 @@ provides:
             onAppend:      null,
             offsetTop:     null,
             overlayOpacity:.3,
-            overlayColor:  "#000000",
+            overlayColor:  '#000000',
             width:         400,
             draggable:     true,
             keyEsc:        true,
             overlayClick:  true,
-            closeButton:   true, // X close button
+            closeButton:   true,
             hideHeader:    false,
             hideFooter:    false,
 			animate:       true,
-            btn_ok:        "OK", // Label
-            btn_cancel:    "Cancel", // Label
-            template:"<div class=\"simple-modal-header\"> \
+            btn_ok:        'OK',
+            btn_cancel:    'Cancel',
+            template: '<div class=\"simple-modal-header\"> \
                 <h1>{_TITLE_}</h1> \
             </div> \
                 <div class=\"simple-modal-body\"> \
                 <div class=\"contents\">{_CONTENTS_}</div> \
             </div> \
-                <div class=\"simple-modal-footer\"></div>"
+                <div class=\"simple-modal-footer\"></div>'
         },
 
         SimpleModal: function(options) {
@@ -94,207 +94,148 @@ provides:
             return this;
         },
 
-        /**
-         * public method showModal
-         * Open Modal
-         * @options: param to rewrite
-         * @return node HTML
-         */
         showModal: function() {
-            var node = null;
+            var content = null;
+            this._overlay('show');
 
-            // Inserisce Overlay
-            this._overlay("show");
-
-            // Switch different modal
             switch(this.options.model) {
-            case "modal-ajax":
-				        node = this._drawWindow(this.options);
-                this._loadContents({
-                    "url": self.options.param.url || "",
-                    "onRequestComplete": this.options.param.onRequestComplete
-                });
+            case 'modal':
                 break;
-            case "confirm":
-                // Add button confirm
-                this.addButton(this.options.btn_ok, "btn primary btn-margin", function() {
-                    // in oppose to original version, i'm not catching exceptions
-                    // i want to know what's eventually goes wrong
+            case 'modal-ajax':
+                content = {
+                    url: self.options.param.url || '',
+                    onRequestComplete: this.options.param.onRequestComplete
+                };
+                break;
+            case 'confirm':
+                this.addButton(this.options.btn_ok, 'btn primary btn-margin', function() {
                     self.options.callback();
                     self.hideModal();
                 });
-                // Add button cancel
-                this.addButton(this.options.btn_cancel, "btn secondary");
-                		node = this._drawWindow(this.options);
-                break;
-            case "modal":
-				        node = this._drawWindow(this.options);
+                this.addButton(this.options.btn_cancel, 'btn secondary');
                 break;
             default:
-				// Alert
-                this.addButton(this.options.btn_ok, "btn primary");
-				        node = this._drawWindow(this.options);
+                this.addButton(this.options.btn_ok, 'btn primary');
             }
-			if (node) {
-                // Custom size Modal
-                node.css('width', this.options.width);
 
-                // Hide Header &&/|| Footer
-                if (this.options.hideHeader) node.addClass("hide-header");
-                if (this.options.hideFooter) node.addClass("hide-footer");
+            var $node = this._drawWindow(this.options, content);
+			if ($node) {
+                $node.css('width', this.options.width);
 
-                // Add Button X
+                if (this.options.hideHeader) $node.addClass('hide-header');
+                if (this.options.hideFooter) $node.addClass('hide-footer');
                 if (this.options.closeButton) this._addCloseButton();
 
                 // Enabled Drag Window
                 if (this.options.draggable) {
-                    var headDrag = node.find('.simple-modal-header'), clicked = false, dx=0, dy=0;
-                    var updatePos = function(pos) {
-                        node.css({left: pos.x-dx, top: pos.y-dy});
-                    };
-                    var getMousePos = function(e) {
-                        return { 'x': e.pageX, 'y': e.pageY };
-	                };
-                    headDrag.bind({
-                        mousedown: function(e) {
-                            var mpos = getMousePos(e), cpos = node.position();
-
-                            e.stopPropagation();
-                            e.preventDefault();
-
-                            dx = mpos.x - cpos.left;
-                            dy = mpos.y - cpos.top;
-
-                            clicked = true;
+                    var clicked = false,
+                        dx = 0,
+                        dy = 0,
+                        updatePos = function(pos) {
+                            $node.css({left: pos.x - dx, top: pos.y - dy});
                         },
-                        mouseup: function(e) {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            clicked = false;
-                        }
-                    });
+                        getMousePos = function(e) {
+                            return {
+                                x: e.pageX,
+                                y: e.pageY
+                            };
+	                    },
+                        $header = $node.find('.simple-modal-header').bind({
+                            mousedown: function(e) {
+                                var mpos = getMousePos(e),
+                                    cpos = $node.position();
+
+                                e.stopPropagation();
+                                e.preventDefault();
+
+                                dx = mpos.x - cpos.left + document.body.scrollLeft;
+                                dy = mpos.y - cpos.top +  document.body.scrollTop;
+
+                                clicked = true;
+                            },
+                            mouseup: function(e) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                clicked = false;
+                            }
+                        }).css('cursor', 'move');
+
                     $(document).mousemove(function(e) {
                         e.stopPropagation();
                         e.preventDefault();
-		                if (clicked)
-			                updatePos(getMousePos(e));
-	                });
 
-                    // Set handle cursor
-                    headDrag.css("cursor", "move");
-                    node.addClass("draggable");
+		                if (clicked) {
+			                updatePos(getMousePos(e));
+                        }
+	                });
+                    $node.addClass('draggable');
                 }
-                // Resize Stage
                 this._display();
             }
         },
 
-        /**
-         * public method hideModal
-         * Close model window
-         * return
-         */
         hideModal: function() {
 		    self._overlay('hide');
         },
 
-        /**
-         * private method _drawWindow
-         * Rendering window
-         * return node SM
-         */
-		_drawWindow:function(options) {
-			// Add Node in DOM
-            var node = $("<div>").addClass('simple-modal').attr('id', 'simple-modal');
+        addButton: function(label, clazz, handler) {
+            this.buttons.push($('<a>', {title : label, class : clazz})
+                              .click(handler ? function(e) { handler.call(self, e); } : self.hideModal)
+                              .text(label));
+            return this;
+        },
 
-			// Set Contents
-		    node.html(this._template(self.options.template, {"_TITLE_":options.title || "Untitled", "_CONTENTS_":options.contents || ""}));
+        _drawWindow:function(options, content) {
+            var $node = $('<div>', {id: 'simple-modal'})
+                .addClass('simple-modal')
+		        .html(this._template(self.options.template, {
+                    '_TITLE_':options.title || 'Untitled',
+                    '_CONTENTS_':options.contents || ''
+                })),
+                $footer = $node.find('.simple-modal-footer');
 
-            $('body').append(node);
+            $.each(self.buttons, function(i, e) { $footer.append(e); });
+            $('body').append($node);
 
-			// Add all buttons
-		    this._injectAllButtons();
-
-		    // Callback append
+            if (content) {
+                this._loadContents(content, $node);
+            }
             if (this.options.onAppend) {
 		        this.options.onAppend.call(this);
             }
-			return node;
+			return $node;
 		},
 
-        /**
-         * public method addButton
-         * Add button to Modal button array
-         * require @label:string, @classe:string, @clickEvent:event
-         * @return node HTML
-         */
-        addButton: function(label, classe, clickEvent) {
-            var bt = $('<a>').attr({
-                "title" : label,
-                "class" : classe
-            }).click(clickEvent ? function(e) { clickEvent.call(self, e); } : self.hideModal).text(label);
-
-            this.buttons.push(bt);
- 		    return this;
-        },
-
-        /**
-         * private method _injectAllButtons
-         * Inject all buttons in simple-modal-footer
-         * @return
-         */
-        _injectAllButtons: function() {
-            var footer = $("#simple-modal").find(".simple-modal-footer");
-
-           $.each(self.buttons, function(i, e) {
-               footer.append(e);
-            });
-        },
-
-        /**
-         * private method _addCloseButton
-         * Inject Close botton (X button)
-         * @return node HTML
-         */
         _addCloseButton: function() {
-            var b = $("<a>").addClass('close').attr({"href": "#"}).text('x').click(function(e) {
-                self.hideModal();
-                e.preventDefault();
-            });
-            $("#simple-modal").append(b);
-            return b;
+            $('#simple-modal').append($('<a>', {'href': '#'})
+                                      .addClass('close')
+                                      .text('x')
+                                      .click(function(e) {
+                                          self.hideModal();
+                                          e.preventDefault();
+                                      }));
         },
 
-        /**
-         * private method _overlay
-         * Create/Destroy overlay and Modal
-         * @return
-         */
         _overlay: function(status) {
             switch(status) {
             case 'show':
-                var overlay = $("<div>")
-                        .attr("id", "simple-modal-overlay")
-                        .css({"background-color": this.options.overlayColor, "opacity": 0});
+                var $overlay = $('<div>', {'id': 'simple-modal-overlay'});
 
-                $('body').append(overlay);
+                $('body').append($overlay
+                                 .css({'background-color': this.options.overlayColor, 'opacity': 0})
+                                 .animate({opacity: this.options.overlayOpacity}, self.options.animate ? 400 : 0));
 
-                overlay.animate({opacity: this.options.overlayOpacity}, self.options.animate ? 400 : 0);
-
-                // Behaviour
                 if (this.options.overlayClick) {
-                    overlay.click(function(e) { self.hideModal(); });
+                    $overlay.click(function(e) { self.hideModal(); });
                 }
 
-                // Add Control Resize
                 $(window).resize(self._display);
                 $(document).keyup(self._escape);
                 break;
 
             case 'hide':
-                // Remove Overlay
-                $('#simple-modal-overlay').remove();
                 $('#simple-modal').remove();
+                $('#simple-modal-overlay').remove();
 
                 $(window).unbind('resize', self._display);
                 $(document).unbind('keyup', self._escape);
@@ -302,87 +243,69 @@ provides:
         },
 
         _escape: function(e) {
-        	if (self.options.keyEsc && e.keyCode == 27) self.hideModal();
+        	if (self.options.keyEsc && e.keyCode == 27) {
+                self.hideModal();
+            }
         },
 
-        /**
-         * private method _loadContents
-         * Async request for modal ajax
-         * @return
-         */
-        _loadContents: function(param) {
-			// Set Loading
-			$('#simple-modal').addClass("loading");
-			// Match image file
-			var re = new RegExp( /([^\/\\]+)\.(jpg|png|gif)$/i ), container = $('#simple-modal');
+        _loadContents: function(param, $node) {
+			var re = new RegExp( /([^\/\\]+)\.(jpg|png|gif)$/i ),
+                $container = $node.addClass('loading'),
+                $overlay = $('#simple-modal-overlay');
+
 			if (param.url.match(re)) {
-				// Hide Header/Footer
-	            container.addClass("hide-footer");
-				// Remove All Event on Overlay
-				$("#simple-modal-overlay").unbind(); // Prevent Abort
-				// Immagine
-                var image = $('<img>').attr('src', param.url)
-                        .load(function() {
-							var content = container.removeClass("loading").find(".contents").empty().append($(this).css('opacity', 0));
-                            var dw = container.width() - content.width(), dh = container.height() - content.height();
-							var width = $(this).width()+dw, height  = $(this).height()+dh;
+	            $container.addClass('hide-footer');
+				$overlay.unbind(); // Prevent Abort
 
-                            //self._display();
-                            container.animate({
-                                width: width,
-                                height: height,
-                                left: ($(window).width() - width)/2,
-                                top: ($(window).height() - height)/2
-                            }, self.options.animate ? 200 : 0, function () {
-                            	image.animate({opacity: 1},self.options.animate ? 400 : 0);
-                            });
-                        });
-			} else {
-                $('#simple-modal .contents').load(param.url, function(responseText, textStatus, XMLHttpRequest) {
-                    var container = $(this).parent().parent().removeClass("loading");
-                    if (textStatus !== 'success') {
-	                    container.find(".contents").html("loading failed");
+                var $image = $('<img>', {'src': param.url}).load(function() {
+					var $this = $(this),
+                        $window = $(window),
+                        $content = $container.removeClass('loading').find('.contents').empty().append($this.css('opacity', 0)),
+                        dw = $container.width() - $content.width(), dh = $container.height() - $content.height(),
+						width = $this.width() + dw, height = $this.height() + dh;
 
-                        if (param.onRequestFailure) {
-                            param.onRequestFailure();
-                        }
-                    }
-                    else
-                    {
-                        if (param.onRequestComplete) {
-                            param.onRequestComplete();
-                        }
-	                    self._display();
-                    }
+                    $container.animate({
+                        width: width,
+                        height: height,
+                        left: ($window.width() - width)/2,
+                        top: ($window.height() - height)/2
+                    }, self.options.animate ? 200 : 0, function () {
+                        $image.animate({opacity: 1}, self.options.animate ? 400 : 0);
+                    });
                 });
-			}
-        },
+			} else $container.find('.contents').load(param.url, function(responseText, textStatus, XMLHttpRequest) {
+                $container.removeClass('loading');
 
-        /**
-         * private method _display
-         * Move interface
-         * @return
-         */
-        _display: function() {
-            // Update overlay
-            $("#simple-modal-overlay").css({width: $(window).width(), height: $(window).height()});
+                if (textStatus !== 'success') {
+	                $container.find('.contents').html('loading failed');
 
-            // Update position popup
-            var modal = $("#simple-modal"), top = self.options.offsetTop || ($(window).height() - modal.height())/2;
-            modal.css({
-                top: top,
-                left: (($(window).width() - modal.width())/2)
+                    if (param.onRequestFailure) {
+                        param.onRequestFailure();
+                    }
+                } else {
+                    if (param.onRequestComplete) {
+                        param.onRequestComplete();
+                    }
+	                self._display();
+                }
             });
         },
 
-        /**
-         * private method _template
-         * simple template by Thomas Fuchs
-         * @return
-         */
+        _display: function() {
+            var $window  = $(window),
+                $modal   = $('#simple-modal'),
+                $overlay = $('#simple-modal-overlay');
+
+            $overlay.css({width: $window.width(), height: $window.height()});
+            $modal.css({
+                top: self.options.offsetTop || ($window.height() - $modal.height()) / 2,
+                left: ($window.width() - $modal.width()) / 2
+            });
+        },
+
         _template:function(s,d) {
-            for(var p in d) {
-                s=s.replace(new RegExp('{'+p+'}','g'), d[p]);
+            for (var p in d) {
+                s = s.replace(new RegExp('{' + p + '}','g'), d[p]);
             }
             return s;
         }
