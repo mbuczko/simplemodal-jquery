@@ -2,13 +2,13 @@ $(document).ready(function() {
 
     /* Alert */
     $('#alert').click(function() {
-        $.fn.SimpleModal({btn_ok: 'Alert button', title: 'Alert Modal Title', contents: 'Lorem ipsum dolor sit amet...'}).showModal();
+        $.fn.SimpleModal({btnOk: 'Alert button', title: 'Alert Modal Title', contents: 'Lorem ipsum dolor sit amet...'}).showModal();
     });
 
     /* Confirm */
     $('#confirm').click(function() {
         $.fn.SimpleModal({
-            btn_ok: 'Confirm button',
+            btnOk: 'Confirm button',
             model: 'confirm',
             callback: function(){
                 alert('Action confirm!');
@@ -21,7 +21,7 @@ $(document).ready(function() {
     /* Modal */
     $('#modal').click(function() {
         $.fn.SimpleModal({
-            btn_ok: 'Confirm button',
+            btnOk: 'Confirm button',
             model: 'modal',
             title: 'Modal Window Title',
             contents: '<p ><img style="text-align:center" src="assets/images/simpleModalSmallWhite.png" />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>'
@@ -34,7 +34,7 @@ $(document).ready(function() {
     /* Modal Ajax */
     $('#modal-ajax').click(function() {
         $.fn.SimpleModal({
-            btn_ok: 'Confirm button',
+            btnOk: 'Confirm button',
             width: 600,
             model: 'modal-ajax',
             title: 'Are you sure you want to delete this?',
@@ -70,7 +70,7 @@ $(document).ready(function() {
         $.fn.SimpleModal({
             hideHeader: true,
             closeButton: false,
-            btn_ok: 'Close window',
+            btnOk: 'Close window',
             width: 600,
             model: 'alert',
             contents: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
@@ -90,7 +90,7 @@ $(document).ready(function() {
 
     $("#example-eheh").click(function(e) {
         $.fn.SimpleModal({
-            btn_ok: 'Confirm button',
+            btnOk: 'Confirm button',
             overlayClick: false,
             width: 300,
             model: 'modal',

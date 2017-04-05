@@ -56,7 +56,6 @@
 
     var self = null;
 
-    //Attach this new method to jQuery
     $.fn.extend({
         buttons: null,
         options: null,
@@ -69,13 +68,12 @@
             width:         400,
             draggable:     true,
             keyEsc:        true,
-            overlayClick:  true,
             closeButton:   true,
             hideHeader:    false,
             hideFooter:    false,
 			animate:       true,
-            btn_ok:        'OK',
-            btn_cancel:    'Cancel',
+            btnOk:         'OK',
+            btnCancel:     'Cancel',
             template: '<div class=\"simple-modal-header\"> \
                 <h1>{_TITLE_}</h1> \
             </div> \
@@ -95,83 +93,64 @@
         },
 
         showModal: function() {
-            var content = null;
+            var loadable = null;
+
             this._overlay('show');
 
             switch(this.options.model) {
             case 'modal':
                 break;
             case 'modal-ajax':
-                content = {
+                loadable = {
                     url: self.options.param.url || '',
                     onRequestComplete: this.options.param.onRequestComplete
                 };
                 break;
             case 'confirm':
-                this.addButton(this.options.btn_ok, 'btn primary btn-margin', function() {
-                    self.options.callback();
+                this.addButton(this.options.btnOk, 'btn primary btn-margin', function() {
                     self.hideModal();
+                    self.options.callback();
                 });
-                this.addButton(this.options.btn_cancel, 'btn secondary');
+                this.addButton(this.options.btnCancel, 'btn secondary');
                 break;
             default:
-                this.addButton(this.options.btn_ok, 'btn primary');
+                this.addButton(this.options.btnOk, 'btn primary');
             }
 
-            var $node = this._drawWindow(this.options, content);
-			if ($node) {
-                $node.css('width', this.options.width);
+            var $node = this._drawWindow(this.options, loadable);
 
-                if (this.options.hideHeader) $node.addClass('hide-header');
-                if (this.options.hideFooter) $node.addClass('hide-footer');
-                if (this.options.closeButton) this._addCloseButton();
+            if (this.options.closeButton) { this._addCloseButton($node);   }
+            if (this.options.hideHeader)  { $node.addClass('hide-header'); }
+            if (this.options.hideFooter)  { $node.addClass('hide-footer'); }
+            if (this.options.draggable)   {
+                var dx = 0,
+                    dy = 0,
+                    updatePos = function(e) {
+                        $node.css({left: e.pageX - dx, top: e.pageY - dy});
+                    };
 
-                // Enabled Drag Window
-                if (this.options.draggable) {
-                    var clicked = false,
-                        dx = 0,
-                        dy = 0,
-                        updatePos = function(pos) {
-                            $node.css({left: pos.x - dx, top: pos.y - dy});
+                $node
+                    .find('.simple-modal-header')
+                    .bind({
+                        mousedown: function(e) {
+                            var pos = $node.position();
+
+                            dx = e.pageX - pos.left + document.body.scrollLeft;
+                            dy = e.pageY - pos.top +  document.body.scrollTop;
+
+                            e.stopPropagation();
+                            e.preventDefault();
+
+                            $(document).mousemove(updatePos);
                         },
-                        getMousePos = function(e) {
-                            return {
-                                x: e.pageX,
-                                y: e.pageY
-                            };
-	                    },
-                        $header = $node.find('.simple-modal-header').bind({
-                            mousedown: function(e) {
-                                var mpos = getMousePos(e),
-                                    cpos = $node.position();
-
-                                e.stopPropagation();
-                                e.preventDefault();
-
-                                dx = mpos.x - cpos.left + document.body.scrollLeft;
-                                dy = mpos.y - cpos.top +  document.body.scrollTop;
-
-                                clicked = true;
-                            },
-                            mouseup: function(e) {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                clicked = false;
-                            }
-                        }).css('cursor', 'move');
-
-                    $(document).mousemove(function(e) {
-                        e.stopPropagation();
-                        e.preventDefault();
-
-		                if (clicked) {
-			                updatePos(getMousePos(e));
+                        mouseup: function(e) {
+                            $(document).unbind('mousemove', updatePos);
                         }
-	                });
-                    $node.addClass('draggable');
-                }
-                this._display();
+                    })
+                    .css('cursor', 'move')
+                    .addClass('draggable');
             }
+            this._display();
         },
 
         hideModal: function() {
@@ -179,55 +158,59 @@
         },
 
         addButton: function(label, clazz, handler) {
-            this.buttons.push($('<a>', {title : label, class : clazz})
-                              .click(handler ? function(e) { handler.call(self, e); } : self.hideModal)
-                              .text(label));
+            this.buttons
+                .push($('<a>', {title : label, class : clazz})
+                      .click(handler ? function(e) { handler.call(self, e); } : self.hideModal)
+                      .text(label));
             return this;
         },
 
-        _drawWindow:function(options, content) {
+        _drawWindow: function(options, loadable) {
             var $node = $('<div>', {id: 'simple-modal'})
                 .addClass('simple-modal')
 		        .html(this._template(self.options.template, {
-                    '_TITLE_':options.title || 'Untitled',
-                    '_CONTENTS_':options.contents || ''
+                    '_TITLE_':    options.title || 'Untitled',
+                    '_CONTENTS_': options.contents || ''
                 })),
                 $footer = $node.find('.simple-modal-footer');
 
+            // append all added buttons
             $.each(self.buttons, function(i, e) { $footer.append(e); });
-            $('body').append($node);
 
-            if (content) {
-                this._loadContents(content, $node);
+            // dom element as content? inject it into dialog.
+            if (this.options.element) {
+                $node.find('.contents').replace(this.options.element);
             }
+
+            $('body').append($node.css('width', this.options.width));
+
             if (this.options.onAppend) {
 		        this.options.onAppend.call(this);
+            }
+            if (loadable) {
+                this._loadContents(loadable, $node);
             }
 			return $node;
 		},
 
-        _addCloseButton: function() {
-            $('#simple-modal').append($('<a>', {'href': '#'})
-                                      .addClass('close')
-                                      .text('x')
-                                      .click(function(e) {
-                                          self.hideModal();
-                                          e.preventDefault();
-                                      }));
+        _addCloseButton: function($node) {
+            $node.append($('<a>', {href: '#', class: 'close'})
+                         .text('x')
+                         .click(function(e) {
+                             self.hideModal();
+                             return false;
+                         }));
         },
 
-        _overlay: function(status) {
-            switch(status) {
+        _overlay: function(action) {
+            switch(action) {
             case 'show':
-                var $overlay = $('<div>', {'id': 'simple-modal-overlay'});
+                var $overlay = $('<div>', {id: 'simple-modal-overlay'});
 
                 $('body').append($overlay
                                  .css({'background-color': this.options.overlayColor, 'opacity': 0})
-                                 .animate({opacity: this.options.overlayOpacity}, self.options.animate ? 400 : 0));
-
-                if (this.options.overlayClick) {
-                    $overlay.click(function(e) { self.hideModal(); });
-                }
+                                 .animate({opacity: this.options.overlayOpacity}, self.options.animate ? 400 : 0)
+                                 .click(self.hideModal));
 
                 $(window).resize(self._display);
                 $(document).keyup(self._escape);
@@ -243,7 +226,7 @@
         },
 
         _escape: function(e) {
-        	if (self.options.keyEsc && e.keyCode == 27) {
+        	if (self.options.keyEsc && e.keyCode === 27) {
                 self.hideModal();
             }
         },
@@ -254,14 +237,15 @@
                 $overlay = $('#simple-modal-overlay');
 
 			if (param.url.match(re)) {
+				$overlay.unbind();
 	            $container.addClass('hide-footer');
-				$overlay.unbind(); // Prevent Abort
 
                 var $image = $('<img>', {'src': param.url}).load(function() {
 					var $this = $(this),
                         $window = $(window),
                         $content = $container.removeClass('loading').find('.contents').empty().append($this.css('opacity', 0)),
-                        dw = $container.width() - $content.width(), dh = $container.height() - $content.height(),
+                        dw = $container.width() - $content.width(),
+                        dh = $container.height() - $content.height(),
 						width = $this.width() + dw, height = $this.height() + dh;
 
                     $container.animate({
@@ -273,22 +257,25 @@
                         $image.animate({opacity: 1}, self.options.animate ? 400 : 0);
                     });
                 });
-			} else $container.find('.contents').load(param.url, function(responseText, textStatus, XMLHttpRequest) {
-                $container.removeClass('loading');
 
-                if (textStatus !== 'success') {
-	                $container.find('.contents').html('loading failed');
+			} else $container
+                    .find('.contents')
+                    .load(param.url, function(responseText, textStatus, XMLHttpRequest) {
+                        $container.removeClass('loading');
 
-                    if (param.onRequestFailure) {
-                        param.onRequestFailure();
-                    }
-                } else {
-                    if (param.onRequestComplete) {
-                        param.onRequestComplete();
-                    }
-	                self._display();
-                }
-            });
+                        if (textStatus !== 'success') {
+	                        $container.find('.contents').html('loading failed');
+
+                            if (param.onRequestFailure) {
+                                param.onRequestFailure();
+                            }
+                        } else {
+                            if (param.onRequestComplete) {
+                                param.onRequestComplete();
+                            }
+	                        self._display();
+                        }
+                    });
         },
 
         _display: function() {
@@ -303,7 +290,7 @@
             });
         },
 
-        _template:function(s,d) {
+        _template: function(s,d) {
             for (var p in d) {
                 s = s.replace(new RegExp('{' + p + '}','g'), d[p]);
             }
